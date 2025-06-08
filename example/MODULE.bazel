@@ -1,0 +1,5 @@
+""" Module """
+module(name = "arm_example")
+
+bazel_dep(name = "rules_gcc_arm_none_eabi")
+local_path_override(module_name="rules_gcc_arm_none_eabi", path="../")
