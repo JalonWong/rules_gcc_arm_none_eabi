@@ -1,9 +1,9 @@
-import re
 import os
-import sys
+import re
 import subprocess
+import sys
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) >= 2:
         arm_path = sys.argv[1]
         if not os.path.exists(arm_path):
@@ -11,12 +11,12 @@ if __name__ == '__main__':
     else:
         exit(1)
 
-    arm_bin = os.path.join(arm_path, 'bin', 'arm-none-eabi-gcc')
-    ret = subprocess.run([arm_bin, '--version'], capture_output=True, text=True)
+    arm_bin = os.path.join(arm_path, "bin", "arm-none-eabi-gcc")
+    ret = subprocess.run([arm_bin, "--version"], capture_output=True, text=True)
     if ret.returncode != 0:
         exit(ret.returncode)
 
-    obj = re.search('\) ([\d\.]+)', ret.stdout)
+    obj = re.search(r"\) ([\d\.]+)", ret.stdout)
     if obj:
         print(obj.group(1))
         exit(0)
