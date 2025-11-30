@@ -2,7 +2,6 @@
 
 load("@rules_gcc_arm_none_eabi//:base.bzl",
     "resolve_labels",
-    "find_python",
     "get_arm_gcc_version",
     "find_toolchain_path",
     "print_info",
@@ -21,7 +20,6 @@ def _impl(repository_ctx):
     repository_ctx.symlink(paths["@rules_gcc_arm_none_eabi//toolchain:BUILD"], "BUILD")
     repository_ctx.symlink(paths["@rules_gcc_arm_none_eabi//toolchain:toolchain.bzl"], "toolchain.bzl")
 
-    python = find_python(repository_ctx)
     arm_gcc_path = find_toolchain_path(repository_ctx, "arm-none-eabi-gcc")
 
     optional_cflags = []
@@ -52,13 +50,17 @@ def _impl(repository_ctx):
     )
 
     redirect_py = repository_ctx.path(Label("@rules_gcc_arm_none_eabi//toolchain:redirect.py"))
+    if "windows" in repository_ctx.os.name:
+        redirect_bat = repository_ctx.path(Label("@rules_gcc_arm_none_eabi//toolchain:shell/redirect.bat"))
+    else:
+        redirect_bat = repository_ctx.path(Label("@rules_gcc_arm_none_eabi//toolchain:shell/redirect.sh"))
+
     repository_ctx.template(
         "gen.bzl",
         paths["@rules_gcc_arm_none_eabi//toolchain:gen.bzl.tpl"],
         {
             "%{arm_root_path}": arm_gcc_path,
-            "%{redirect_py}": str(redirect_py),
-            "%{python}": python,
+            "%{redirect}": str(redirect_bat),
         },
     )
 

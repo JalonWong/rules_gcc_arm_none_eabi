@@ -2,7 +2,6 @@
 
 ## Dependence
 - bazel v8+
-- python3
 - gcc-arm-none-eabi
 
 ## Getting Started
@@ -86,6 +85,7 @@ cmd_to_file(
     args = [
         "--print-size",
         "--numeric-sort",
+        "$(input)",
     ]
 )
 ```

@@ -62,6 +62,7 @@ def _impl_cmd_to_file(ctx):
         ctx.attr.args,
         ctx.file.input,
         out_file,
+        True,
     )
 
     return [

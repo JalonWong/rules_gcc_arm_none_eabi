@@ -29,17 +29,6 @@ def get_ext(repository_ctx):
     else:
         return ""
 
-def find_python(repository_ctx):
-    path = repository_ctx.which("python3")
-    if path == None:
-        path = repository_ctx.which("python")
-
-    if path == None:
-        fail_error("python not found in PATH!")
-        return ""
-    else:
-        return str(path)
-
 def get_arm_gcc_version(repository_ctx, arm_path):
     gcc = "/".join([arm_path, "bin", "arm-none-eabi-gcc"])
     result = repository_ctx.execute([gcc, "--version"])

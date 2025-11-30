@@ -19,27 +19,30 @@ def arm_gen_hex(ctx, input, output, inputs):
         executable = _OBJCOPY,
     )
 
-def arm_cmd_to_file(ctx, cmd, options, in_file, out_file):
-    args = ctx.actions.args()
-    args.add("%{redirect_py}")
-    args.add(cmd)
-    args.add_all(options)
-    args.add(in_file.path)
-    args.add(out_file.path)
+def arm_cmd_to_file(ctx, cmd, args, in_file, out_file, use_default_shell_env):
+    arguments = ctx.actions.args()
+    arguments.add(out_file.path)
+    arguments.add(cmd)
+    for arg in args:
+        if arg == "$(input)":
+            arguments.add(in_file.path)
+        else:
+            arguments.add(arg)
 
     ctx.actions.run(
-        use_default_shell_env = True,
+        use_default_shell_env = use_default_shell_env,
         outputs = [out_file],
         inputs = [in_file],
-        arguments = [args],
-        executable = "%{python}",
+        arguments = [arguments],
+        executable = "%{redirect}",
     )
 
 def arm_gen_asm(ctx, input, output):
     arm_cmd_to_file(
         ctx,
         _OBJDUMP,
-        ["--disassemble", "--no-show-raw-insn"],
+        ["--disassemble", "--no-show-raw-insn", input.path],
         input,
-        output
+        output,
+        False,
     )
