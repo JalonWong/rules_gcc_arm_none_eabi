@@ -40,6 +40,27 @@ def find_python(repository_ctx):
     else:
         return str(path)
 
+def get_arm_gcc_version(repository_ctx, arm_path):
+    gcc = "/".join([arm_path, "bin", "arm-none-eabi-gcc"])
+    result = repository_ctx.execute([gcc, "--version"])
+
+    if result.return_code == 0:
+        output = result.stdout.strip()
+        n = output.find(")")
+        if n < 0:
+            return ""
+
+        version = ""
+        for i in range(n, len(output)):
+            c = output[i]
+            if (c >= '0' and c <= '9') or c == '.':
+                version += c
+            elif len(version) > 0:
+                break
+        return version
+    else:
+        return ""
+
 def find_toolchain_path(repository_ctx, toolchain_name):
     """find toolchain path
 

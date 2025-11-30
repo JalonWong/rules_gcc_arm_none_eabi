@@ -3,6 +3,7 @@
 ## Dependence
 - bazel v8+
 - python3
+- gcc-arm-none-eabi
 
 ## Getting Started
 First, install gcc-arm-none-eabi compiler, for example:
