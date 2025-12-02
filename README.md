@@ -16,16 +16,14 @@ Ues `arm-none-eabi-gcc --version` to confirm that the environment variable has t
 
 Add the following to your `MODULE.bazel` file:
 ```python
-bazel_dep(name = "rules_gcc_arm_none_eabi")
-git_override(
-    module_name="rules_gcc_arm_none_eabi",
-    remote="https://github.com/JalonWong/rules_gcc_arm_none_eabi.git",
-    branch="main",
-)
+bazel_dep(name = "rules_gcc_arm_none_eabi", version="<version>")
 ```
 
 Add the following to your `.bazelrc` file:
 ```shell
+common --registry=https://raw.githubusercontent.com/JalonWong/bazel-registry/main/
+common --registry=https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main/
+
 build --incompatible_enable_cc_toolchain_resolution
 build --platforms=@rules_gcc_arm_none_eabi//:cm3 # depends on your platform
 ```
